@@ -6,3 +6,5 @@ src/.vuepress/dist/
 
 .well-known/
 .htaccess
+
+package-lock.json
