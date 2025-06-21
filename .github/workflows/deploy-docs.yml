@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # 如果你文档需要 Git 子模块，取消注释下一行
@@ -27,22 +27,21 @@ jobs:
 
 
       - name: 设置 Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
       - name: 安装依赖
-        run: |
-          corepack enable
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile # pnpm/action-setup 会处理 corepack
 
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
-        run: |-
-          pnpm run docs:build
-          > src/.vuepress/dist/.nojekyll
+        run: pnpm run docs:build #分离 .nojekyll 的创建
+
+      - name: 创建 .nojekyll 文件
+        run: touch src/.vuepress/dist/.nojekyll
 
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
