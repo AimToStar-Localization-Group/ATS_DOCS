@@ -12,9 +12,6 @@ permissions:
 jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./docs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,7 +24,6 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 8
-          dest: ./docs/node_modules/.bin
 
 
       - name: 设置 Node.js
@@ -35,17 +31,15 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          cache-dependency-path: docs/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile # pnpm/action-setup 会处理 corepack
-        working-directory: ./docs
 
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run docs:build #分离 .nojekyll 的创建
-        working-directory: ./docs
 
       - name: 创建 .nojekyll 文件
         run: touch src/.vuepress/dist/.nojekyll
@@ -55,4 +49,4 @@ jobs:
         with:
           # 部署文档
           branch: gh-pages
-          folder: docs/src/.vuepress/dist
+          folder: src/.vuepress/dist
