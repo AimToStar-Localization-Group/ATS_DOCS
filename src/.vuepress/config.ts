@@ -3,7 +3,7 @@ import { defineUserConfig } from "vuepress";
 import theme from "./theme.js";
 
 export default defineUserConfig({
-  base: "/ATS_DOCS/",
+  base: "/",
   head: [
     ['link', { rel: 'icon', href: '/icon.png' }],
     [
